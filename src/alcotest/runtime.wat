@@ -5,6 +5,12 @@
       (func $caml_ml_set_channel_fd (param (ref eq)) (param i32)))
    (import "env" "caml_ml_get_channel_offset"
       (func $caml_ml_get_channel_offset (param (ref eq)) (result i64)))
+   (import "env" "caml_js_global"
+      (func $caml_js_global (param (ref eq)) (result (ref eq))))
+   (import "env" "caml_js_get"
+      (func $caml_js_get (param (ref eq)) (param (ref eq)) (result (ref eq))))
+   (import "env" "wrap" (func $wrap (param anyref) (result (ref eq))))
+   (import "env" "unwrap" (func $unwrap (param (ref eq)) (result anyref)))
 
    (global $saved_stdout (mut i32) (i32.const 0))
    (global $saved_stderr (mut i32) (i32.const 0))
@@ -30,17 +36,11 @@
          (global.get $saved_stderr))
       (ref.i31 (i32.const 0)))
 
-   (import "env" "caml_js_global"
-      (func $caml_js_global (param (ref eq)) (result (ref eq))))
-   (import "env" "caml_js_get"
-      (func $caml_js_get (param (ref eq)) (param (ref eq)) (result (ref eq))))
-   (import "env" "wrap" (func $wrap (param anyref) (result (ref eq))))
-   (import "env" "unwrap" (func $unwrap (param (ref eq)) (result anyref)))
-
    (type $block (array (mut (ref eq))))
+   (type $string (array (mut i8)))
 
    (func $is_null (param (ref eq)) (result i32)
-      (ref.is_null (call $unwrap (local.get $0))))
+      (ref.is_null (call $unwrap (local.get 0))))
 
    (data $process "process")
    (data $stdout "stdout")
